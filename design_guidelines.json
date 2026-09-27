@@ -1,0 +1,200 @@
+{
+  "project_info": {
+    "name": "AppleBase",
+    "tagline": "Innovation Reimagined — Premium Electronics Storefront & 3D Showcase",
+    "theme_default": "light",
+    "theme_support": ["light", "dark"],
+    "font_family": "Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    "file_extension": "js"
+  },
+  "typography": {
+    "headings": {
+      "h1_hero": "text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-slate-50 leading-[1.08]",
+      "h2_section": "text-3xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 leading-tight",
+      "h3_sub": "text-xl sm:text-2xl font-medium text-slate-800 dark:text-slate-200 tracking-tight",
+      "card_title": "text-lg font-semibold text-slate-900 dark:text-slate-100"
+    },
+    "body": {
+      "main": "text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal",
+      "small": "text-sm text-slate-500 dark:text-slate-400 font-medium",
+      "micro": "text-xs uppercase tracking-widest font-semibold text-slate-400 dark:text-slate-500"
+    },
+    "rules": [
+      "Use Inter or system-ui sans-serif across all headings and body text.",
+      "Headings > 32px must always use tracking-tight or tracking-tighter for Apple-level typographic tension.",
+      "Never exceed text-7xl for H1 to maintain fluid responsiveness.",
+      "Maintain clear contrast ratio (WCAG AA / APCA compliant) in both light and dark themes."
+    ]
+  },
+  "colors": {
+    "light": {
+      "background": "#F5F5F7",
+      "surface": "#FFFFFF",
+      "surface_elevated": "#FAFAFC",
+      "text_primary": "#1D1D1F",
+      "text_secondary": "#86868B",
+      "border": "rgba(0, 0, 0, 0.08)",
+      "border_accent": "rgba(0, 0, 0, 0.15)",
+      "primary": "#0071E3",
+      "primary_hover": "#0077ED",
+      "accent_orange": "#FF6B00",
+      "metallic_silver": "#E2E8F0",
+      "titanium_gold": "#D4AF37",
+      "badge_new_bg": "#E8F5E9",
+      "badge_new_text": "#1B5E20",
+      "badge_openbox_bg": "#FFF3E0",
+      "badge_openbox_text": "#E65100",
+      "badge_used_bg": "#F3E5F5",
+      "badge_used_text": "#4A148C"
+    },
+    "dark": {
+      "background": "#000000",
+      "surface": "#161617",
+      "surface_elevated": "#1D1D1F",
+      "text_primary": "#F5F5F7",
+      "text_secondary": "#A1A1A6",
+      "border": "rgba(255, 255, 255, 0.12)",
+      "border_accent": "rgba(255, 255, 255, 0.22)",
+      "primary": "#2997FF",
+      "primary_hover": "#0071E3",
+      "accent_orange": "#FF7A00",
+      "metallic_silver": "#334155",
+      "titanium_gold": "#F59E0B",
+      "badge_new_bg": "rgba(46, 125, 50, 0.25)",
+      "badge_new_text": "#81C784",
+      "badge_openbox_bg": "rgba(230, 81, 0, 0.25)",
+      "badge_openbox_text": "#FFB74D",
+      "badge_used_bg": "rgba(106, 27, 154, 0.25)",
+      "badge_used_text": "#CE93D8"
+    }
+  },
+  "layout_and_sections": {
+    "structure": [
+      {
+        "id": "announcement_bar",
+        "description": "Sticky top bar with warranty, open-box savings, and trade-in promotion marquee ticker"
+      },
+      {
+        "id": "navbar",
+        "description": "Glassmorphic header with AppleBase brand logo, navigation links (Mac, iPad, iPhone, Watch, Audio, Certified Refurbished), search bar input modal trigger, theme toggle (Light/Dark), and cart drawer trigger with dynamic badge count"
+      },
+      {
+        "id": "canvas_background",
+        "description": "Fixed full-screen 3D WebGL background (<canvas>) pinned with GSAP ScrollTrigger"
+      },
+      {
+        "id": "section_1_hero",
+        "description": "Hero section: 'Innovation Reimagined'. Kinetic masked headline reveal, subheader, key metrics, scroll indicator, quick CTA buttons"
+      },
+      {
+        "id": "section_2_features",
+        "description": "Feature callout: 'Precision Engineered'. Apple-style multi-column bento grid detailing aerospace titanium frame, M-series architecture, micro-LED retina panel, and 30-day trial guarantee"
+      },
+      {
+        "id": "section_3_product_showcase",
+        "description": "Interactive E-Commerce Storefront Showcase: Categorized into 'Hot Deals', 'Available Now', and 'Recommended'. Filterable product cards with condition chips (New / Open-Box / Used—Excellent), price tags, savings callouts, stock counters, and Add-to-Cart controls"
+      },
+      {
+        "id": "section_4_final_specs_cta",
+        "description": "Final CTA & Tech Specs: 'Available Now'. Detailed specification row (Processor, Display, Battery, Connectivity), trade-in estimation tool trigger, 1-click Express Checkout CTA, and storefront footer"
+      }
+    ]
+  },
+  "three_js_specifications": {
+    "renderer": {
+      "antialiasing": true,
+      "alpha": true,
+      "powerPreference": "high-performance",
+      "pixelRatioLimit": 2
+    },
+    "camera": {
+      "type": "PerspectiveCamera",
+      "fov": 45,
+      "near": 0.1,
+      "far": 1000,
+      "position": [0, 0, 5]
+    },
+    "lights": [
+      { "type": "AmbientLight", "intensity": 0.8 },
+      { "type": "DirectionalLight", "position": [5, 5, 5], "intensity": 1.5 },
+      { "type": "DirectionalLight", "position": [-5, -5, -2], "intensity": 0.5 },
+      { "type": "PointLight", "position": [0, 2, 2], "intensity": 1.2, "color": "#ffffff" }
+    ],
+    "mesh": {
+      "type": "TorusKnotGeometry",
+      "args": [1, 0.35, 128, 32],
+      "material": {
+        "type": "MeshStandardMaterial",
+        "roughness": 0.2,
+        "metalness": 0.8,
+        "envMapIntensity": 1.5
+      }
+    },
+    "responsive": "Dynamic window resize listener updating camera aspect ratio and renderer size"
+  },
+  "gsap_scroll_trigger_phases": {
+    "scrub": 1.2,
+    "phases": [
+      {
+        "phase": 1,
+        "scroll_range": "Section 1 (Hero) to Section 2 (Precision Engineered)",
+        "mesh_transform": "Rotates 180 degrees smoothly on Y/X axes and scales up by 1.25x",
+        "visual_effect": "Cinematic heavy spin with subtle lighting transition"
+      },
+      {
+        "phase": 2,
+        "scroll_range": "Section 2 to Section 3 (Product Showcase)",
+        "mesh_transform": "Translates horizontally to the right/left while section text shifts opposite, followed by a tight macro zoom (scale 2.2x)",
+        "visual_effect": "Focus spotlight on metallic surface details"
+      },
+      {
+        "phase": 3,
+        "scroll_range": "Section 3 to Section 4 (Available Now)",
+        "mesh_transform": "Returns to floating center position with continuous gentle orbit rotation",
+        "visual_effect": "Ambient floating breathing effect behind checkout card"
+      }
+    ]
+  },
+  "fallbacks_and_accessibility": {
+    "webgl_fallback": "If WebGL fails or context is lost, display a CSS animated gradient metallic ring with subtle blur and glass backdrop",
+    "reduced_motion": "Detect prefers-reduced-motion media query and disable camera/mesh scroll animations, maintaining stationary elegant backdrop",
+    "dom_first_principle": "All product details, pricing, filter inputs, cart actions, and checkout forms are rendered in accessible DOM elements with proper semantic tags and ARIA attributes."
+  },
+  "curated_image_urls": {
+    "laptops": [
+      "https://images.unsplash.com/photo-1668606143699-26b823c2a0bc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4Nx&q=85",
+      "https://images.unsplash.com/photo-1668608321309-8fa4f70deeed?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4Nx&q=85",
+      "https://images.unsplash.com/photo-1787572972403-0574502bf056?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4Nx&q=85"
+    ],
+    "audio": [
+      "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4Nx&q=85",
+      "https://images.unsplash.com/photo-1641048930621-ab5d225ae5b0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4Nx&q=85",
+      "https://images.unsplash.com/photo-1628202926206-c63a34b1618f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4Nx&q=85"
+    ],
+    "wearables": [
+      "https://images.unsplash.com/photo-1786124967103-875dda046e85?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4Nx&q=85",
+      "https://images.unsplash.com/photo-1774389992420-44d11d49f16b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4Nx&q=85",
+      "https://images.unsplash.com/photo-1783792894893-8332ee93d1de?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4Nx&q=85"
+    ]
+  },
+  "testing_and_data_attributes": {
+    "rule": "All interactive buttons, inputs, links, badges, condition tags, theme toggles, cart triggers, and product items MUST contain kebab-case data-testid attributes.",
+    "examples": [
+      "data-testid=\"theme-toggle-button\"",
+      "data-testid=\"nav-search-button\"",
+      "data-testid=\"cart-drawer-trigger\"",
+      "data-testid=\"product-card-macbook-pro\"",
+      "data-testid=\"add-to-cart-button-macbook-pro\"",
+      "data-testid=\"condition-chip-open-box\"",
+      "data-testid=\"checkout-express-button\"",
+      "data-testid=\"filter-category-hot-deals\""
+    ]
+  },
+  "instructions_for_main_agent": [
+    "Work directly in /app/frontend/src utilizing JavaScript (.js) files.",
+    "Integrate Three.js, GSAP with ScrollTrigger, Framer Motion, and Lenis smooth scrolling.",
+    "Implement full Dark/Light theme switching with 'light' as default, storing setting in localStorage and applying dark class to documentElement.",
+    "Ensure all storefront commerce capabilities are fully functional (Cart drawer, item counter, condition filtering, search filter, toast notifications via Sonner).",
+    "Keep 3D canvas fixed in background with pin: true, scrub: 1.2 for Apple-like momentum felt scroll animation."
+  ]
+}

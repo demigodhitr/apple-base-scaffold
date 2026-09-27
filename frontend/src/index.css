@@ -1,0 +1,243 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* shadcn tokens (light) */
+    --background: 240 8% 96%;
+    --foreground: 240 6% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 6% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 6% 10%;
+    --primary: 211 100% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5% 92%;
+    --secondary-foreground: 240 6% 10%;
+    --muted: 240 5% 92%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 24 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 6% 88%;
+    --input: 240 6% 88%;
+    --ring: 211 100% 45%;
+    --radius: 1rem;
+
+    /* AppleBase palette */
+    --ab-bg: #f4f4f6;
+    --ab-bg-deep: #ececed;
+    --ab-surface: #ffffff;
+    --ab-text: #121214;
+    --ab-text-dim: #6c6c74;
+    --ab-line: rgba(18, 18, 20, 0.1);
+    --ab-line-strong: rgba(18, 18, 20, 0.18);
+    --ab-blue: #0071e3;
+    --ab-ember: #ff5f18;
+    --ab-glass: rgba(255, 255, 255, 0.62);
+    --ab-glass-strong: rgba(255, 255, 255, 0.82);
+    --ab-shadow: 0 30px 80px -40px rgba(18, 18, 30, 0.45);
+    --ab-grain-opacity: 0.035;
+    --ab-scrim-1: rgba(244, 244, 246, 0.94);
+    --ab-scrim-2: rgba(244, 244, 246, 0.6);
+  }
+
+  .dark {
+    --background: 240 6% 4%;
+    --foreground: 240 10% 96%;
+    --card: 240 5% 9%;
+    --card-foreground: 240 10% 96%;
+    --popover: 240 5% 9%;
+    --popover-foreground: 240 10% 96%;
+    --primary: 210 100% 58%;
+    --primary-foreground: 240 6% 6%;
+    --secondary: 240 4% 14%;
+    --secondary-foreground: 240 10% 96%;
+    --muted: 240 4% 14%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 24 100% 55%;
+    --accent-foreground: 240 6% 6%;
+    --border: 240 5% 18%;
+    --input: 240 5% 18%;
+    --ring: 210 100% 58%;
+
+    --ab-bg: #07070a;
+    --ab-bg-deep: #000000;
+    --ab-surface: #131317;
+    --ab-text: #f3f3f6;
+    --ab-text-dim: #98989f;
+    --ab-line: rgba(255, 255, 255, 0.11);
+    --ab-line-strong: rgba(255, 255, 255, 0.22);
+    --ab-blue: #2997ff;
+    --ab-ember: #ff7a2f;
+    --ab-glass: rgba(20, 20, 24, 0.55);
+    --ab-glass-strong: rgba(18, 18, 22, 0.8);
+    --ab-shadow: 0 30px 90px -40px rgba(0, 0, 0, 0.9);
+    --ab-grain-opacity: 0.05;
+    --ab-scrim-1: rgba(7, 7, 10, 0.9);
+    --ab-scrim-2: rgba(7, 7, 10, 0.45);
+  }
+
+  * {
+    border-color: var(--ab-line);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
+    background: var(--ab-bg);
+    color: var(--ab-text);
+    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    transition:
+      background-color 0.6s ease,
+      color 0.4s ease;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--ab-text);
+    color: var(--ab-bg);
+  }
+
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+
+@layer components {
+  .ab-shell {
+    @apply mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-16;
+  }
+
+  .ab-eyebrow {
+    @apply text-[0.68rem] uppercase tracking-[0.34em] font-semibold;
+    color: var(--ab-text-dim);
+  }
+
+  .ab-glass {
+    background: var(--ab-glass);
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    border: 1px solid var(--ab-line);
+  }
+
+  .ab-panel {
+    background: var(--ab-glass-strong);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid var(--ab-line);
+    box-shadow: var(--ab-shadow);
+  }
+
+  .ab-hairline {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--ab-line-strong),
+      transparent
+    );
+  }
+
+  .ab-pill {
+    @apply inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300;
+  }
+
+  .ab-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold;
+    background: var(--ab-text);
+    color: var(--ab-bg);
+    transition:
+      transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 0.35s ease,
+      background-color 0.4s ease;
+  }
+  .ab-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.55);
+  }
+
+  .ab-btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold;
+    border: 1px solid var(--ab-line-strong);
+    color: var(--ab-text);
+    transition:
+      transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      background-color 0.35s ease;
+  }
+  .ab-btn-ghost:hover {
+    transform: translateY(-2px);
+    background: var(--ab-glass-strong);
+  }
+
+  .ab-display {
+    font-family: "Space Grotesk", ui-sans-serif, sans-serif;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+  }
+
+  .ab-serif-italic {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-style: italic;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .ab-grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: var(--ab-grain-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  .ab-mask-line {
+    display: block;
+    overflow: hidden;
+  }
+
+  .ab-marquee {
+    animation: ab-marquee 26s linear infinite;
+  }
+
+  @keyframes ab-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .ab-float {
+    animation: ab-float 5.5s ease-in-out infinite;
+  }
+
+  @keyframes ab-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ab-marquee,
+  .ab-float {
+    animation: none !important;
+  }
+}
