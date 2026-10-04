@@ -49,6 +49,7 @@ const CAPTIONS: Caption[] = [
 /** Keynote-style caption that follows the 3D choreography, one line per act. */
 export const SceneCaption = () => {
   const [active, setActive] = useState<Caption | null>(CAPTIONS[0]);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
     let frame = 0;
@@ -64,6 +65,11 @@ export const SceneCaption = () => {
         if (rect.top <= middle && rect.bottom > middle) next = c;
       });
       if (next) setActive(next);
+
+      const footer = document.querySelector("footer");
+      setHidden(
+        Boolean(footer && footer.getBoundingClientRect().top < window.innerHeight * 0.75),
+      );
     };
 
     const onScroll = () => {
@@ -88,7 +94,7 @@ export const SceneCaption = () => {
       data-testid="scene-caption"
     >
       <AnimatePresence mode="wait">
-        {active && (
+        {active && !hidden && (
           <motion.div
             key={active.id}
             initial={{ opacity: 0, y: 18, filter: "blur(8px)" }}

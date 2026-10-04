@@ -227,14 +227,21 @@ export function useThreeScene(
       gsap
         .timeline({
           defaults: { ease: "none" },
-          scrollTrigger: { trigger: "#specs", start: "top bottom", end: "bottom top", ...common },
+          scrollTrigger: { trigger: "#specs", start: "top bottom", end: "bottom 35%", ...common },
         })
         .to(watch.holder.position, { x: rx - 0.3, y: -0.6, duration: 0.45 }, 0)
         .to(watch.holder.rotation, { y: Math.PI * 2, duration: 0.6 }, 0)
         .to(watch.holder.scale, { x: 1.15, y: 1.15, z: 1.15, duration: 0.35 }, 0.45)
-        // slide out before the footer so the links stay clean
-        .to(watch.holder.position, { x: rx + 4.5, y: 0.4, duration: 0.25 }, 0.8)
-        .to(watch.holder.rotation, { y: Math.PI * 2.6, duration: 0.25 }, 0.8);
+        .to(watch.holder.rotation, { y: Math.PI * 2.4, duration: 0.2 }, 0.8);
+
+      // the footer gets a clean stage — the watch slides out of frame
+      gsap
+        .timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: { trigger: "footer", start: "top 92%", end: "top 45%", ...common },
+        })
+        .to(watch.holder.position, { x: rx + 5, y: 0.8, duration: 1 }, 0)
+        .to(watch.holder.scale, { x: 0.6, y: 0.6, z: 0.6, duration: 1 }, 0);
     });
 
     return () => ctx.revert();
