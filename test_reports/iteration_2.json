@@ -1,0 +1,30 @@
+{
+  "summary": "Full frontend E2E of AppleBase 3D store (React TS + Vite, no backend). BUG FIX VERIFIED: all three horizontal rails (hero-product-rail, rail-hot-deals, rail-top-rated) scroll via (a) next/prev arrows (hot-deals: 0->888->0, top-rated: 0->888->0, hero: 0->280->0), (b) mouse pointer drag (0->272 for hot-deals/top-rated, 0->280 for hero), (c) carry data-lenis-prevent attribute so Lenis does not swallow wheel; drag does NOT navigate to /product and plain click DOES navigate (e.g. rail-card-iphone-titan-pro-max -> /product/iphone-titan-pro-max). Product page: all testids present (title/price/stock/specs/highlights/viewer-canvas 645x542/add-to-bag/buy-now/trade-in/back-to-store-link, gallery-thumb-3d + 0/1/2 switch between 3D and gallery-main-image). Cart: add-to-bag increments cart-count-badge 0->1, buy-now adds (badge->2) and triggers drawer flow, trade-in shows toast, back-to-store returns to /. All 5 GLB models load with HTTP 200 (iphone/macbook/ipad/watch/buds .glb) on their respective product pages; no console errors, only Three.js UV-set warnings and benign GL ReadPixels perf warnings. Storefront: category-tab-all=24, iphone=5, mac=5; deal filters hot=3/available=3/recommended=2; sort-select price-asc first=$30, price-desc first=$1,899; search 'watch'=3 results, 'zzzz' shows no-results-message. Cart drawer: cart-total $1,899, cart-remove works, cart-empty-message shown, checkout-express-button present. Theme toggle flips light/dark (verified visually - dark background applied) and persists across reload. Navigation from landing: nav-link-store scrollY=2089, engineering=3294, specs=6214 (Lenis). Responsive 390x844: 0px horizontal overflow on landing and product page, rail still visible. Scroll choreography sections all reachable (section-hero/features/showcase/specs + footer). No red console errors anywhere.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "Nav from /product/:id -> nav-link-specs", "issue": "URL changes to '/' but window.scrollY stays 0 after ~2.5s wait (expected to scroll to #specs after route transition). Likely a Lenis re-init timing race on route change. Works correctly when triggered from landing (scrollY=6214).", "affected_selectors": ["nav-link-specs", "nav-link-store", "nav-link-engineering"]}
+    ],
+    "design_issues": [
+      {"screen": "Hero/WebGL background", "issues": ["Benign GL perf warning 'GPU stall due to ReadPixels' (3x then throttled) - carried over from iteration 1, non-blocking."]},
+      {"screen": "3D models (console)", "issues": ["THREE.GLTFLoader warnings 'Custom UV set 1 for texture map not yet supported' for all GLB files - cosmetic, model still renders. Could re-export GLBs with primary UV set only."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Optional: after route change from /product/:id to '/', delay nav scroll until Lenis is re-initialized (await next frame + lenis ready) so scrollY actually advances; currently stays 0.",
+    "Optional: re-export GLBs without secondary UV set to silence Three.js warnings."
+  ],
+  "critical_code_review_comments": [
+    "ProductRail.tsx correctly implements the three fix mechanisms (arrows via nudge, pointer drag with moved threshold>5px, data-lenis-prevent on the track, onClickCapture suppressing click after drag). Good separation and no leaks on pointerleave. LGTM.",
+    "loadModel.ts uses Draco + webp but GLBs still have duplicate UV sets - minor warning noise, consider cleaning in source models.",
+    "Theme persistence works but neither sets html.dark class nor data-theme attribute at the root; relies on CSS variables set elsewhere - fine but makes programmatic theme detection in tests harder (visual verification only)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (frontend only)", "frontend": "100% of critical flows (10/10); 1 minor nav-after-route-change timing issue"},
+  "seed_data_creation": "None (static catalogue in src/data/catalog.ts)",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Bug fix for horizontal rails is confirmed working. Use `window.__lenis.scrollTo(y,{immediate:true})` with 1.5-2s wait for vertical nav. For horizontal rails, assert on element.scrollLeft (not window). Theme is applied via CSS vars - verify visually via screenshot, not via html.dark class."
+}

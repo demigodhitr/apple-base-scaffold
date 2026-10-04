@@ -18,8 +18,8 @@ export const Navbar = () => {
 
   const go = (target: string) => {
     if (pathname !== "/") {
-      navigate("/");
-      window.setTimeout(() => scrollToSection(target), 380);
+      // Landing picks this up once mounted, so the scroll can't race the route change
+      navigate("/", { state: { scrollTo: target } });
       return;
     }
     scrollToSection(target);
