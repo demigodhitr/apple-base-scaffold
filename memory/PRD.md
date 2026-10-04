@@ -64,20 +64,37 @@ GSAP ScrollTrigger, Lenis 1.3, framer-motion, sonner, react-router-dom. No backe
   `data-lenis-prevent` so Lenis no longer swallows horizontal wheel — verified by testing agent.
 - Light/dark themes with full palette swap (scene env map, lighting and scrim rebuild per theme).
 
+## Enhancements (second round, 2026-07)
+- **Colourway picker** on the product page — swatches per family recolour the live 3D model
+  (`applyTint` blends toward the finish and skips emissive/screen meshes so displays stay lit)
+- **Compare tray + sheet** — up to 3 products, floating tray, side-by-side spec rows,
+  per-column "Add to bag", limit toast, persisted in `localStorage: applebase-compare`
+- **Recently viewed** — rail on the product page and in the storefront
+  (`localStorage: applebase-recently-viewed`, newest first, current product excluded)
+- **Scroll captions** — keynote-style chip that tracks the 3D acts (Act I–IV) via a rAF
+  viewport-centre check, links to the matching product, and hides over the footer
+- **Bag persistence** — cart survives reloads (`localStorage: applebase-bag`)
+- Footer stage cleanup: a footer-triggered GSAP timeline slides the watch out of frame
+- Cross-route nav fix: nav links from `/product/:id` pass the target through router state and
+  re-aim after the layout settles (a `ScrollTrigger.refresh()` was resetting the scroll)
+- `<Scene />` now mounts after the first paint so route changes paint sooner
+
 ## Testing
 - `/app/test_reports/iteration_1.json` — first pass on the pre-router version: all flows passed
 - `/app/test_reports/iteration_2.json` — full regression: 10/10 critical flows pass, rail-scroll bug
   confirmed fixed, all five GLBs return 200, no console errors. The single minor finding
   (nav link from a product page not scrolling after the route change) was fixed afterwards by
   passing the target through router state and scrolling once `Landing` mounts — verified manually.
+- `/app/test_reports/iteration_3.json` — four enhancements: all pass; two minor findings
+  (cross-route nav scroll, 3D watch/caption over the footer)
+- `/app/test_reports/iteration_4.json` — both findings confirmed FIXED, full regression green
 - No auth anywhere, so `/app/memory/test_credentials.md` is not applicable.
 
 ## Backlog
 P1
-- Replace the remaining procedural AirPods/alt models if higher-quality GLBs arrive
+- Replace models if higher-quality GLBs arrive (loader + fallback already in place)
 - Re-export GLBs without the secondary UV set to silence `THREE.GLTFLoader` UV warnings
-- Colourway picker on the product page driving the 3D material
 P2
-- Compare drawer / recently viewed rail, wishlist
+- Wishlist / save-for-later
 - Keyboard-accessible rail scrolling + focus rings audit
 - Mobile tuning of the 3D acts (devices currently centre and shrink under 1024px)

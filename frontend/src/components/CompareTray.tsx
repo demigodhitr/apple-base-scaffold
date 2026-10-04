@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Scale, X } from "lucide-react";
 import { useCompare } from "@/hooks/useCompare";
+import { useCart } from "@/hooks/useCart";
 import type { Product } from "@/data/catalog";
 
 const ROWS = [
@@ -16,6 +17,7 @@ const ROWS = [
 /** Floating compare tray + side-by-side spec sheet. */
 export const CompareTray = () => {
   const { items, open, setOpen, remove, clear } = useCompare();
+  const { add } = useCart();
 
   return (
     <>
@@ -124,8 +126,21 @@ export const CompareTray = () => {
                       className="aspect-[4/3] w-full rounded-2xl object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                     />
                     <p className="ab-eyebrow mt-3">{p.categoryLabel}</p>
-                    <p className="ab-display mt-1 text-sm font-semibold">{p.name}</p>
+                    <p className="ab-display mt-1 min-h-[2.6rem] text-sm font-semibold">{p.name}</p>
                   </Link>
+                ))}
+
+                <div />
+                {items.map((p) => (
+                  <div key={`${p.id}-buy`} className="pt-1">
+                    <button
+                      onClick={() => add(p)}
+                      data-testid={`compare-add-${p.id}`}
+                      className="ab-btn-primary w-full !px-4 !py-2.5 text-xs"
+                    >
+                      Add to bag · ${p.price.toLocaleString()}
+                    </button>
+                  </div>
                 ))}
 
                 {ROWS.map((row) => (

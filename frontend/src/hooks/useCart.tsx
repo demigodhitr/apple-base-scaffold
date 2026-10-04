@@ -1,6 +1,15 @@
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { toast } from "sonner";
-import type { Product } from "@/data/catalog";
+import { PRODUCTS, type Product } from "@/data/catalog";
+
+const KEY = "applebase-bag";
 
 export type CartLine = { product: Product; qty: number };
 
@@ -16,9 +25,31 @@ type CartApi = {
 
 const CartContext = createContext<CartApi | null>(null);
 
+const restore = (): CartLine[] => {
+  try {
+    const raw = window.localStorage.getItem(KEY);
+    const saved = raw ? (JSON.parse(raw) as Array<{ id: string; qty: number }>) : [];
+    return saved
+      .map(({ id, qty }) => {
+        const product = PRODUCTS.find((p) => p.id === id);
+        return product ? { product, qty } : null;
+      })
+      .filter((l): l is CartLine => Boolean(l));
+  } catch {
+    return [];
+  }
+};
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [lines, setLines] = useState<CartLine[]>([]);
+  const [lines, setLines] = useState<CartLine[]>(restore);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      KEY,
+      JSON.stringify(lines.map((l) => ({ id: l.product.id, qty: l.qty }))),
+    );
+  }, [lines]);
 
   const add = useCallback((product: Product) => {
     setLines((prev) => {
