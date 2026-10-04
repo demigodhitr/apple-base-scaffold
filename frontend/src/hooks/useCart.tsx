@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { toast } from "sonner";
-import type { Product } from "@/data/products";
+import type { Product } from "@/data/catalog";
 
 export type CartLine = { product: Product; qty: number };
 

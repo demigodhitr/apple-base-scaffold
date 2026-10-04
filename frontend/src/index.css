@@ -128,12 +128,16 @@
     border: 1px solid var(--ab-line);
   }
 
+  /* Solid (not blurred) — backdrop-filter on many cards destroys scroll fps. */
   .ab-panel {
-    background: var(--ab-glass-strong);
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    background: var(--ab-surface);
     border: 1px solid var(--ab-line);
     box-shadow: var(--ab-shadow);
+  }
+
+  .ab-panel-soft {
+    background: var(--ab-surface);
+    border: 1px solid var(--ab-line);
   }
 
   .ab-hairline {

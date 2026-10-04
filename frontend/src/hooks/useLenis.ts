@@ -11,10 +11,11 @@ export function useLenis() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const lenis = new Lenis({
-      duration: 1.15,
-      easing: (t: number) => 1 - Math.pow(1 - t, 3),
-      touchMultiplier: 1.4,
-      wheelMultiplier: 1,
+      lerp: 0.12,
+      wheelMultiplier: 1.05,
+      touchMultiplier: 1.6,
+      syncTouch: true,
+      prevent: (node: HTMLElement) => node.hasAttribute("data-lenis-prevent"),
     });
 
     lenis.on("scroll", ScrollTrigger.update);
@@ -39,4 +40,10 @@ export function scrollToSection(selector: string) {
   const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
   if (lenis) lenis.scrollTo(el as HTMLElement, { offset: -40 });
   else el.scrollIntoView({ behavior: "smooth" });
+}
+
+export function scrollToTop(immediate = true) {
+  const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
+  if (lenis) lenis.scrollTo(0, { immediate });
+  else window.scrollTo(0, 0);
 }

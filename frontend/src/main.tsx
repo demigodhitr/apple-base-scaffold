@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import "@/index.css";
 import App from "@/App";
 import { ThemeProvider } from "@/hooks/useTheme";
@@ -9,7 +10,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider>
       <CartProvider>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </CartProvider>
     </ThemeProvider>
   </React.StrictMode>,

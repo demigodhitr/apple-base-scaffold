@@ -1,19 +1,29 @@
 import { ShoppingBag } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useCart } from "@/hooks/useCart";
 import { scrollToSection } from "@/hooks/useLenis";
 
 const LINKS = [
-  { label: "Notebooks", target: "#showcase" },
-  { label: "Audio", target: "#showcase" },
-  { label: "Wearables", target: "#showcase" },
+  { label: "Store", target: "#showcase" },
   { label: "Engineering", target: "#features" },
   { label: "Specs", target: "#specs" },
 ];
 
 export const Navbar = () => {
   const { count, setOpen } = useCart();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const go = (target: string) => {
+    if (pathname !== "/") {
+      navigate("/");
+      window.setTimeout(() => scrollToSection(target), 380);
+      return;
+    }
+    scrollToSection(target);
+  };
 
   return (
     <motion.header
@@ -25,7 +35,7 @@ export const Navbar = () => {
     >
       <div className="ab-shell flex h-16 items-center justify-between gap-6">
         <button
-          onClick={() => scrollToSection("#hero")}
+          onClick={() => (pathname === "/" ? scrollToSection("#hero") : navigate("/"))}
           className="flex items-center gap-2.5"
           data-testid="brand-logo-button"
         >
@@ -42,7 +52,7 @@ export const Navbar = () => {
           {LINKS.map((l) => (
             <button
               key={l.label}
-              onClick={() => scrollToSection(l.target)}
+              onClick={() => go(l.target)}
               data-testid={`nav-link-${l.label.toLowerCase()}`}
               className="group relative rounded-full px-3.5 py-2 text-sm transition-colors duration-300"
               style={{ color: "var(--ab-text-dim)" }}

@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import { ArrowUpRight, Repeat } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
-import { SPECS } from "@/data/products";
+import { SPECS } from "@/data/catalog";
 import { useCart } from "@/hooks/useCart";
 
 export const SpecsCTA = () => {
@@ -48,6 +48,29 @@ export const SpecsCTA = () => {
                 >
                   <Repeat size={15} /> Estimate trade-in
                 </button>
+              </div>
+            </Reveal>
+            <Reveal i={4}>
+              <div
+                className="mt-14 grid max-w-md grid-cols-3 gap-px overflow-hidden rounded-2xl"
+                style={{ background: "var(--ab-line)" }}
+                data-testid="specs-trust-badges"
+              >
+                {[
+                  { k: "24h", v: "Dispatch" },
+                  { k: "2 yrs", v: "Warranty" },
+                  { k: "30 days", v: "Returns" },
+                ].map((b) => (
+                  <div key={b.k} className="px-4 py-5" style={{ background: "var(--ab-surface)" }}>
+                    <p className="ab-display text-lg font-semibold">{b.k}</p>
+                    <p
+                      className="mt-1 text-[0.68rem] uppercase tracking-[0.16em]"
+                      style={{ color: "var(--ab-text-dim)" }}
+                    >
+                      {b.v}
+                    </p>
+                  </div>
+                ))}
               </div>
             </Reveal>
           </div>
