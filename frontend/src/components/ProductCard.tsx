@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Plus, Star } from "lucide-react";
+import { Check, Plus, Scale, Star } from "lucide-react";
 import type { Condition, Product } from "@/data/catalog";
 import { useCart } from "@/hooks/useCart";
+import { useCompare } from "@/hooks/useCompare";
 
 const CONDITION_STYLE: Record<Condition, { bg: string; fg: string }> = {
   New: { bg: "rgba(16,185,129,0.14)", fg: "#0f9d6f" },
@@ -12,6 +13,8 @@ const CONDITION_STYLE: Record<Condition, { bg: string; fg: string }> = {
 
 export const ProductCard = ({ product, i = 0 }: { product: Product; i?: number }) => {
   const { add } = useCart();
+  const compare = useCompare();
+  const comparing = compare.has(product.id);
   const chip = CONDITION_STYLE[product.condition];
   const saving = product.was ? product.was - product.price : 0;
 
@@ -51,6 +54,24 @@ export const ProductCard = ({ product, i = 0 }: { product: Product; i?: number }
               </span>
             )}
           </div>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              compare.toggle(product);
+            }}
+            aria-label={comparing ? `Remove ${product.name} from compare` : `Compare ${product.name}`}
+            data-testid={`compare-toggle-${product.id}`}
+            className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full opacity-0 transition-all duration-300 group-hover:opacity-100"
+            style={{
+              background: comparing ? "var(--ab-text)" : "var(--ab-surface)",
+              color: comparing ? "var(--ab-bg)" : "var(--ab-text)",
+              border: "1px solid var(--ab-line-strong)",
+              opacity: comparing ? 1 : undefined,
+            }}
+          >
+            {comparing ? <Check size={14} /> : <Scale size={14} />}
+          </button>
         </div>
 
         <div className="flex flex-1 flex-col gap-3 p-5">

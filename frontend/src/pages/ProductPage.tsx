@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Check, Repeat, ShoppingBag, Star } from "lucide-react";
+import { ArrowLeft, Check, Repeat, Scale, ShoppingBag, Star } from "lucide-react";
 import { toast } from "sonner";
 import { PRODUCTS, getProduct } from "@/data/catalog";
 import { ProductViewer } from "@/three/ProductViewer";
 import { ProductRail } from "@/components/ProductRail";
 import { useCart } from "@/hooks/useCart";
+import { useCompare } from "@/hooks/useCompare";
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 
 type View = "3d" | number;
 
@@ -14,10 +16,14 @@ export default function ProductPage() {
   const { id = "" } = useParams();
   const product = getProduct(id);
   const { add, setOpen } = useCart();
+  const compare = useCompare();
   const [view, setView] = useState<View>("3d");
+  const [finish, setFinish] = useState(0);
+  const { items: recentlyViewed } = useRecentlyViewed(product?.id);
 
   useEffect(() => {
     setView("3d");
+    setFinish(0);
   }, [id]);
 
   const related = useMemo(
@@ -42,6 +48,8 @@ export default function ProductPage() {
   }
 
   const saving = product.was ? product.was - product.price : 0;
+  const colorway = product.colorways[finish] ?? product.colorways[0];
+  const comparing = compare.has(product.id);
 
   return (
     <div className="relative pb-24 pt-10" data-testid="product-page">
@@ -65,7 +73,12 @@ export default function ProductPage() {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
               {view === "3d" ? (
-                <ProductViewer kind={product.kind} image={product.image} name={product.name} />
+                <ProductViewer
+                  kind={product.kind}
+                  image={product.image}
+                  name={product.name}
+                  tint={colorway.hex}
+                />
               ) : (
                 <img
                   src={product.gallery[view]}
@@ -133,7 +146,9 @@ export default function ProductPage() {
               >
                 {product.condition}
               </span>
-              <span style={{ color: "var(--ab-text-dim)" }}>{product.colorway}</span>
+              <span style={{ color: "var(--ab-text-dim)" }} data-testid="selected-colorway">
+                {colorway.name}
+              </span>
             </div>
 
             <div className="mt-8 flex items-end gap-3">
@@ -163,6 +178,38 @@ export default function ProductPage() {
                 ? `Only ${product.stock} left in this condition`
                 : `${product.stock} in stock · ships in 24h`}
             </p>
+
+            <div className="mt-8">
+              <p className="ab-eyebrow">Finish — {colorway.name}</p>
+              <div className="mt-3 flex items-center gap-3" data-testid="colorway-picker">
+                {product.colorways.map((c, idx) => {
+                  const active = idx === finish;
+                  return (
+                    <button
+                      key={c.name}
+                      onClick={() => {
+                        setFinish(idx);
+                        setView("3d");
+                      }}
+                      aria-label={c.name}
+                      title={c.name}
+                      data-testid={`colorway-${c.name.toLowerCase().replace(/[^a-z]+/g, "-")}`}
+                      className="grid h-9 w-9 place-items-center rounded-full transition-transform duration-300 hover:scale-110"
+                      style={{
+                        background: c.hex,
+                        boxShadow: active
+                          ? "0 0 0 2px var(--ab-bg), 0 0 0 4px var(--ab-text)"
+                          : "0 0 0 1px var(--ab-line-strong)",
+                      }}
+                    >
+                      {active && (
+                        <Check size={13} color={c.hex === "#f1f1f3" || c.hex === "#d8dade" ? "#111" : "#fff"} />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <button
@@ -194,6 +241,15 @@ export default function ProductPage() {
                 }
               >
                 <Repeat size={15} /> Trade-in
+              </button>
+              <button
+                className="ab-btn-ghost"
+                data-testid="product-compare-toggle"
+                onClick={() => compare.toggle(product)}
+                style={comparing ? { background: "var(--ab-text)", color: "var(--ab-bg)" } : undefined}
+              >
+                {comparing ? <Check size={15} /> : <Scale size={15} />}
+                {comparing ? "In compare" : "Compare"}
               </button>
             </div>
 
@@ -228,6 +284,17 @@ export default function ProductPage() {
             </div>
           </div>
         </div>
+
+        {recentlyViewed.length > 0 && (
+          <div className="mt-24" data-testid="recently-viewed-section">
+            <h2 className="ab-display text-xl font-semibold sm:text-2xl">
+              Recently viewed
+            </h2>
+            <div className="mt-6">
+              <ProductRail items={recentlyViewed} testId="recently-viewed-rail" size="sm" />
+            </div>
+          </div>
+        )}
 
         <div className="mt-24">
           <h2 className="ab-display text-xl font-semibold sm:text-2xl">

@@ -3,7 +3,12 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { createStudioEnv } from "@/three/environment";
 import { createDevice, createScreenTexture } from "@/three/devices";
-import { applyScreenTexture, instantiate, loadDeviceModel } from "@/three/loadModel";
+import {
+  applyScreenTexture,
+  applyTint,
+  instantiate,
+  loadDeviceModel,
+} from "@/three/loadModel";
 import { useTheme } from "@/hooks/useTheme";
 import type { Kind } from "@/data/catalog";
 
@@ -20,12 +25,17 @@ export const ProductViewer = ({
   kind,
   image,
   name,
+  tint,
 }: {
   kind: Kind;
   image: string;
   name: string;
+  tint?: string;
 }) => {
   const hostRef = useRef<HTMLDivElement>(null);
+  const subjectRef = useRef<THREE.Object3D | null>(null);
+  const tintRef = useRef(tint);
+  tintRef.current = tint;
   const { theme } = useTheme();
   const dark = theme === "dark";
   const [failed, setFailed] = useState(false);
@@ -69,6 +79,7 @@ export const ProductViewer = ({
     const holder = new THREE.Group();
     holder.add(model.group);
     scene.add(holder);
+    subjectRef.current = holder;
 
     let disposed = false;
     let screenMap: THREE.Texture | null = null;
@@ -79,6 +90,7 @@ export const ProductViewer = ({
       applyScreenTexture(real, screenMap);
       holder.remove(model.group);
       holder.add(real);
+      if (tintRef.current) applyTint(holder, tintRef.current);
     });
 
     scene.add(new THREE.AmbientLight(0xffffff, dark ? 0.5 : 0.8));
@@ -125,8 +137,13 @@ export const ProductViewer = ({
       envMap.dispose();
       renderer.dispose();
       renderer.domElement.remove();
+      subjectRef.current = null;
     };
   }, [kind, dark]);
+
+  useEffect(() => {
+    if (subjectRef.current && tint) applyTint(subjectRef.current, tint);
+  }, [tint]);
 
   if (failed) {
     return (

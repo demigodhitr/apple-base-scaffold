@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { Navbar } from "@/components/Navbar";
 import { CartDrawer } from "@/components/CartDrawer";
+import { CompareTray } from "@/components/CompareTray";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { Footer } from "@/sections/Footer";
 import Landing from "@/pages/Landing";
@@ -41,6 +42,7 @@ export default function App() {
         <Footer />
       </div>
       <CartDrawer />
+      <CompareTray />
       <Toaster
         theme={theme}
         position="bottom-right"

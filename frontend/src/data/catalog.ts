@@ -3,6 +3,8 @@ export type Kind = "phone" | "laptop" | "tablet" | "watch" | "audio";
 export type CategoryId = "iphone" | "mac" | "ipad" | "watch" | "audio";
 export type GroupId = "hot" | "available" | "recommended";
 
+export type Colorway = { name: string; hex: string };
+
 export type Product = {
   id: string;
   name: string;
@@ -17,6 +19,7 @@ export type Product = {
   rating: number;
   reviews: number;
   colorway: string;
+  colorways: Colorway[];
   spec: string;
   image: string;
   gallery: string[];
@@ -79,6 +82,38 @@ export const CATEGORIES: Array<{
   { id: "watch", label: "Watch", kind: "watch", blurb: "A day of sensing, on your wrist." },
   { id: "audio", label: "Audio", kind: "audio", blurb: "Sound that disappears into the room." },
 ];
+
+const COLORWAYS: Record<CategoryId, Colorway[]> = {
+  iphone: [
+    { name: "Natural Titanium", hex: "#b8b2a7" },
+    { name: "Black Titanium", hex: "#35353a" },
+    { name: "Desert Sand", hex: "#c3a68a" },
+    { name: "Crimson", hex: "#8e2a3a" },
+  ],
+  mac: [
+    { name: "Space Black", hex: "#2e2e32" },
+    { name: "Silver", hex: "#d8dade" },
+    { name: "Starlight", hex: "#e9e0d2" },
+    { name: "Midnight", hex: "#2a3242" },
+  ],
+  ipad: [
+    { name: "Space Black", hex: "#2e2e32" },
+    { name: "Silver", hex: "#d8dade" },
+    { name: "Blue", hex: "#4a6b9a" },
+  ],
+  watch: [
+    { name: "Natural Titanium", hex: "#b8b2a7" },
+    { name: "Slate", hex: "#4a4f57" },
+    { name: "Jet Black", hex: "#1b1b1f" },
+    { name: "Indigo", hex: "#3b4a86" },
+  ],
+  audio: [
+    { name: "White", hex: "#f1f1f3" },
+    { name: "Charcoal", hex: "#3a3a3f" },
+    { name: "Sand", hex: "#d9c7ad" },
+    { name: "Teal", hex: "#2e6f74" },
+  ],
+};
 
 const BASE_SPECS: Record<CategoryId, Array<{ label: string; value: string }>> = {
   iphone: [
@@ -197,6 +232,11 @@ function build(): Product[] {
             "Carbon-neutral next-day delivery",
           ],
         specs: BASE_SPECS[cat.id],
+        colorways: (() => {
+          const list = COLORWAYS[cat.id];
+          const owned = list.find((c) => c.name === s.colorway);
+          return owned ? [owned, ...list.filter((c) => c !== owned)] : list;
+        })(),
       });
     });
   });

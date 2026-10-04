@@ -15,6 +15,7 @@ import {
 import { ProductCard } from "@/components/ProductCard";
 import { ProductRail } from "@/components/ProductRail";
 import { Reveal } from "@/components/Reveal";
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 
 const HOT = PRODUCTS.filter((p) => p.groups.includes("hot")).slice(0, 8);
 const TOP = [...PRODUCTS].sort((a, b) => b.rating - a.rating).slice(0, 8);
@@ -24,6 +25,7 @@ export const Showcase = () => {
   const [category, setCategory] = useState<CategoryId | "all">("all");
   const [sort, setSort] = useState<SortId>("featured");
   const [query, setQuery] = useState("");
+  const { items: recentlyViewed } = useRecentlyViewed();
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -99,6 +101,19 @@ export const Showcase = () => {
 
         {/* rails */}
         <div className="mt-16 space-y-12">
+          {recentlyViewed.length > 0 && (
+            <div data-testid="showcase-recently-viewed">
+              <div className="mb-4 flex items-end justify-between">
+                <h3 className="ab-display text-lg font-semibold sm:text-xl">
+                  Pick up where you left off
+                </h3>
+                <p className="text-xs" style={{ color: "var(--ab-text-dim)" }}>
+                  Recently viewed
+                </p>
+              </div>
+              <ProductRail items={recentlyViewed} testId="rail-recently-viewed" />
+            </div>
+          )}
           <div>
             <div className="mb-4 flex items-end justify-between">
               <h3 className="ab-display text-lg font-semibold sm:text-xl">

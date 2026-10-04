@@ -5,14 +5,17 @@ import "@/index.css";
 import App from "@/App";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { CartProvider } from "@/hooks/useCart";
+import { CompareProvider } from "@/hooks/useCompare";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider>
       <CartProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <CompareProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </CompareProvider>
       </CartProvider>
     </ThemeProvider>
   </React.StrictMode>,

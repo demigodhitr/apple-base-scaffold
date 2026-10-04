@@ -69,6 +69,30 @@ export function loadDeviceModel(kind: Kind) {
   return cache.get(kind)!;
 }
 
+/** Recolours the body (not glass/screens) so colourway swatches change the 3D model live. */
+export function applyTint(root: THREE.Object3D, hex: string) {
+  const color = new THREE.Color(hex);
+  root.traverse((child) => {
+    const mesh = child as THREE.Mesh;
+    if (!mesh.isMesh) return;
+    if (/matte|display|screen|glass|lens|band/i.test(mesh.name)) return;
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    mats.forEach((mat) => {
+      const std = mat as THREE.MeshStandardMaterial;
+      if (!("color" in std) || std instanceof THREE.MeshBasicMaterial) return;
+      // emissive materials are displays / indicator lights — leave them alone
+      const glows =
+        "emissive" in std && std.emissive.getHex() !== 0 && (std.emissiveIntensity ?? 1) > 0;
+      if (glows) return;
+      if (!std.userData.baseColor) std.userData.baseColor = std.color.clone();
+      const base = std.userData.baseColor as THREE.Color;
+      // keep some of the original shading, blend toward the chosen finish
+      std.color.copy(base).lerp(color, std.map ? 0.6 : 1);
+      std.needsUpdate = true;
+    });
+  });
+}
+
 /** Lights up a real model's display by fitting an emissive plane over the panel. */
 export function applyScreenTexture(root: THREE.Object3D, map: THREE.Texture) {
   const targets: THREE.Mesh[] = [];

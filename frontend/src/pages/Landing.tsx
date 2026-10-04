@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { scrollToSection } from "@/hooks/useLenis";
 import { Scene } from "@/three/Scene";
+import { SceneCaption } from "@/components/SceneCaption";
 import { Hero } from "@/sections/Hero";
 import { Features } from "@/sections/Features";
 import { Showcase } from "@/sections/Showcase";
@@ -32,6 +33,7 @@ export default function Landing() {
   return (
     <>
       <Scene />
+      <SceneCaption />
       <div className="relative z-10">
         <Hero />
         <Features />
